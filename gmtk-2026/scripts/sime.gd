@@ -1,12 +1,15 @@
 extends CharacterBody2D
 
-@export var SPEED = 200.0
-var MIN_MOVE_SPEED_FOR_ANIM = 10
+@export var SPEED = 30.0
+@export var MIN_MOVE_SPEED_FOR_ANIM = 28
+@export var MIN_DISTANCE_TO_PLAYER = 28
 enum Directions {LEFT, RIGHT, UP, DOWN}
 var facing_direction = Directions.DOWN
+var player_ref
 
 func _ready() -> void:
 	$Sprite.play("idle_down")
+	player_ref = get_tree().get_first_node_in_group("player")
 
 func _process(delta: float) -> void:
 	print(velocity)
@@ -37,16 +40,13 @@ func _process(delta: float) -> void:
 	# stopped or almost stopped
 
 func _physics_process(delta):
-	# Get the mouse's current global position
-	var mouse_pos = get_global_mouse_position()
-	
 	# Calculate the direction to the mouse and normalize it
-	var direction = global_position.direction_to(mouse_pos)
+	var direction = global_position.direction_to(player_ref.get_position())
 	
 	
 	
 	# Move the enemy using move_and_slide
-	if position.distance_to(mouse_pos) > 10:
+	if position.distance_to(player_ref.get_position()) > MIN_DISTANCE_TO_PLAYER:
 		# Set the velocity and multiply by speed
 		velocity = direction * SPEED
 		move_and_slide()
