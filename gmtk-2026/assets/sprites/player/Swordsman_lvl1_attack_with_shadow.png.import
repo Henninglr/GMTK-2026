@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bfxf8dayfxvwp"
-path="res://.godot/imported/swordsman_lvl1_attack_with_shadow.png-35022ba3d07663f626d007f30ebea3a8.ctex"
+path="res://.godot/imported/Swordsman_lvl1_attack_with_shadow.png-f33f94cef4bcc4ac6e8292fbce557184.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/player/swordsman_lvl1_attack_with_shadow.png"
-dest_files=["res://.godot/imported/swordsman_lvl1_attack_with_shadow.png-35022ba3d07663f626d007f30ebea3a8.ctex"]
+source_file="res://assets/sprites/player/Swordsman_lvl1_attack_with_shadow.png"
+dest_files=["res://.godot/imported/Swordsman_lvl1_attack_with_shadow.png-f33f94cef4bcc4ac6e8292fbce557184.ctex"]
 
 [params]
 
