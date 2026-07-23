@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cdcmleh07675p"]
 
+[ext_resource type="Script" uid="uid://w83l7iuaipd2" path="res://scripts/slime.gd" id="1_4h4y0"]
 [ext_resource type="Texture2D" uid="uid://bnr5gdetciyxm" path="res://assets/sprites/enemies/slime/slime_idle_spritesheet.png" id="1_68gni"]
-[ext_resource type="Script" uid="uid://w83l7iuaipd2" path="res://scripts/sime.gd" id="1_fat0e"]
 [ext_resource type="Texture2D" uid="uid://v2dkmysnugyf" path="res://assets/sprites/enemies/slime/slime_walk_spritesheet.png" id="3_dih7b"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fat0e"]
@@ -443,7 +443,7 @@ animations = [{
 radius = 8.0
 
 [node name="Slime" type="CharacterBody2D" unique_id=1688333745]
-script = ExtResource("1_fat0e")
+script = ExtResource("1_4h4y0")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=996028837]
 sprite_frames = SubResource("SpriteFrames_5xaec")
