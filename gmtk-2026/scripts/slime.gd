@@ -37,13 +37,10 @@ func _process(delta: float) -> void:
 				$Sprite.play("idle_left")
 			Directions.RIGHT:
 				$Sprite.play("idle_right")
-	# stopped or almost stopped
 
 func _physics_process(delta):
 	# Calculate the direction to the mouse and normalize it
 	var direction = global_position.direction_to(player_ref.get_position())
-	
-	
 	
 	# Move the enemy using move_and_slide
 	if position.distance_to(player_ref.get_position()) > MIN_DISTANCE_TO_PLAYER:
