@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://du0ax7t1coqu7"]
 
-[ext_resource type="PackedScene" uid="uid://c6guir5jma5c7" path="res://scenes/Player.tscn" id="1_im37l"]
+[ext_resource type="PackedScene" uid="uid://c6guir5jma5c7" path="res://scenes/player.tscn" id="1_im37l"]
 [ext_resource type="PackedScene" uid="uid://cdcmleh07675p" path="res://scenes/enemies/sime.tscn" id="2_4adyp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xaqli"]
@@ -73,4 +73,4 @@ position = Vector2(64, 64)
 position = Vector2(120, 112)
 
 [node name="Slime" parent="." unique_id=1688333745 instance=ExtResource("2_4adyp")]
-position = Vector2(144, 430)
+position = Vector2(520, 296)

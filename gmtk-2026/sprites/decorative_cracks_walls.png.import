@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bfxf8dayfxvwp"
-path="res://.godot/imported/swordsman_lvl1_attack_with_shadow.png-35022ba3d07663f626d007f30ebea3a8.ctex"
+uid="uid://pnvpmulf2u7y"
+path="res://.godot/imported/decorative_cracks_walls.png-f7de813428f9057d501d84be0fb343f0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/player/swordsman_lvl1_attack_with_shadow.png"
-dest_files=["res://.godot/imported/swordsman_lvl1_attack_with_shadow.png-35022ba3d07663f626d007f30ebea3a8.ctex"]
+source_file="res://sprites/decorative_cracks_walls.png"
+dest_files=["res://.godot/imported/decorative_cracks_walls.png-f7de813428f9057d501d84be0fb343f0.ctex"]
 
 [params]
 
