@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://du0ax7t1coqu7"]
+
+[ext_resource type="PackedScene" uid="uid://c6guir5jma5c7" path="res://scenes/Player.tscn" id="1_im37l"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xaqli"]
+size = Vector2(1152, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6w3oj"]
+size = Vector2(1144, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_im37l"]
+size = Vector2(32, 640)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4adyp"]
+size = Vector2(32, 640)
+
+[node name="TestRoom" type="Node2D" unique_id=18784685]
+
+[node name="Floor" type="ColorRect" parent="." unique_id=38006519]
+offset_right = 1152.0
+offset_bottom = 648.0
+color = Color(0.48570347, 0.48570353, 0.48570347, 1)
+
+[node name="Walls" type="Node2D" parent="." unique_id=925826466]
+
+[node name="TopWall" type="StaticBody2D" parent="Walls" unique_id=1807381745]
+
+[node name="ColorRect" type="ColorRect" parent="Walls/TopWall" unique_id=2076482550]
+offset_right = 1152.0
+offset_bottom = 32.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/TopWall" unique_id=1502692908]
+position = Vector2(576, 16)
+shape = SubResource("RectangleShape2D_xaqli")
+
+[node name="BottomWall" type="StaticBody2D" parent="Walls" unique_id=537566193]
+
+[node name="ColorRect" type="ColorRect" parent="Walls/BottomWall" unique_id=1016976696]
+offset_top = 616.0
+offset_right = 1152.0
+offset_bottom = 648.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/BottomWall" unique_id=105355944]
+position = Vector2(580, 632)
+shape = SubResource("RectangleShape2D_6w3oj")
+
+[node name="Leftwall" type="StaticBody2D" parent="Walls" unique_id=112768878]
+
+[node name="ColorRect" type="ColorRect" parent="Walls/Leftwall" unique_id=1960555411]
+offset_right = 32.0
+offset_bottom = 640.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Leftwall" unique_id=1227262572]
+position = Vector2(16, 320)
+shape = SubResource("RectangleShape2D_im37l")
+
+[node name="RightWall" type="StaticBody2D" parent="Walls" unique_id=1547517289]
+
+[node name="ColorRect" type="ColorRect" parent="Walls/RightWall" unique_id=813385681]
+offset_left = 1120.0
+offset_right = 1152.0
+offset_bottom = 640.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/RightWall" unique_id=447850617]
+position = Vector2(1136, 320)
+shape = SubResource("RectangleShape2D_4adyp")
+
+[node name="Marker2D" type="Marker2D" parent="." unique_id=42640147]
+position = Vector2(64, 64)
+
+[node name="Player" parent="." unique_id=1792432943 instance=ExtResource("1_im37l")]
+position = Vector2(120, 112)
