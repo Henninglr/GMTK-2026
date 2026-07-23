@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cdcmleh07675p"]
 
+[ext_resource type="Script" uid="uid://w83l7iuaipd2" path="res://scripts/sime.gd" id="1_4h4y0"]
 [ext_resource type="Texture2D" uid="uid://bnr5gdetciyxm" path="res://assets/sprites/enemies/slime/slime_idle_spritesheet.png" id="1_68gni"]
-[ext_resource type="Script" uid="uid://w83l7iuaipd2" path="res://scripts/sime.gd" id="1_fat0e"]
 [ext_resource type="Texture2D" uid="uid://v2dkmysnugyf" path="res://assets/sprites/enemies/slime/slime_walk_spritesheet.png" id="3_dih7b"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fat0e"]
@@ -230,6 +230,26 @@ region = Rect2(448, 64, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_5xaec"]
 animations = [{
+"frames": [],
+"loop": 1,
+"name": &"attack_down",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": 1,
+"name": &"attack_left",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": 1,
+"name": &"attack_right",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": 1,
+"name": &"attack_up",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_fat0e")
@@ -447,9 +467,8 @@ script = ExtResource("1_fat0e")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=996028837]
 sprite_frames = SubResource("SpriteFrames_5xaec")
-animation = &"walk_down"
+animation = &"attack_down"
 autoplay = "idle_down"
-frame_progress = 0.6099636
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1285258050]
 shape = SubResource("CircleShape2D_5xaec")
