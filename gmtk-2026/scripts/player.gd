@@ -12,7 +12,8 @@ enum AnimationState {
 	IDLE,
 	WALK,
 	SPRINT,
-	ATTACK
+	ATTACK,
+	HURT
 }
 
 @export var walk_speed : float = 220.0
@@ -28,6 +29,7 @@ var animation_state: AnimationState = AnimationState.IDLE
 var is_attacking: bool = false
 var is_sprinting: bool = false
 var attack_has_hit: bool = false
+var is_hurt: bool = false
 
 func _ready() -> void:
 	animated_sprite.animation_finished.connect(_on_animation_finished)
@@ -44,7 +46,11 @@ func update_input_states() -> void:
 	is_sprinting = Input.is_action_pressed("Sprint")
 
 func handle_attack() -> void:
-	if Input.is_action_just_pressed("Attack") and not is_attacking:
+	if (
+		Input.is_action_just_pressed("Attack")
+		and not is_attacking
+		and not is_hurt
+	):
 		is_attacking = true
 		attack_has_hit = false
 
@@ -114,13 +120,18 @@ func handle_movement() -> void:
 	var input_direction: Vector2 = get_movement_input()
 	var current_speed: float = walk_speed
 
-	if is_sprinting and not is_attacking:
+	if is_sprinting and not is_attacking and not is_hurt:
 		current_speed = sprint_speed
 
-	velocity = input_direction * current_speed
-	move_and_slide()
+	if is_hurt:
+		velocity = Vector2.ZERO
+	else:
+		velocity = input_direction * current_speed
 
-	if is_attacking:
+	move_and_slide()
+	check_enemy_collisions()
+
+	if is_attacking or is_hurt:
 		return
 
 	if input_direction == Vector2.ZERO:
@@ -133,6 +144,29 @@ func handle_movement() -> void:
 		play_animation(AnimationState.SPRINT)
 	else:
 		play_animation(AnimationState.WALK)
+		
+func check_enemy_collisions() -> void:
+	if is_hurt:
+		return
+
+	for collision_index in get_slide_collision_count():
+		var collision: KinematicCollision2D = get_slide_collision(collision_index)
+		var collider: Object = collision.get_collider()
+
+		if collider is Node and collider.is_in_group("enemies"):
+			take_hit()
+			return
+			
+func take_hit() -> void:
+	if is_hurt:
+		return
+
+	is_hurt = true
+	is_attacking = false
+	attack_has_hit = false
+	velocity = Vector2.ZERO
+
+	play_animation(AnimationState.HURT)
 
 func update_facing_direction(input_direction: Vector2) -> void:
 	if abs(input_direction.x) > abs(input_direction.y):
@@ -170,6 +204,8 @@ func get_animation_state_name(state: AnimationState) -> String:
 			return "sprint"
 		AnimationState.ATTACK:
 			return "attack"
+		AnimationState.HURT:
+			return "hurt"
 	return "idle"
 
 func get_facing_direction_name(direction: FacingDirection) -> String:
@@ -185,11 +221,16 @@ func get_facing_direction_name(direction: FacingDirection) -> String:
 	return "down"
 
 func _on_animation_finished() -> void:
-	if animation_state != AnimationState.ATTACK:
-		return
+	match animation_state:
+		AnimationState.ATTACK:
+			is_attacking = false
+			attack_has_hit = false
 
-	is_attacking = false
-	attack_has_hit = false
+		AnimationState.HURT:
+			is_hurt = false
+
+		_:
+			return
 
 	if velocity == Vector2.ZERO:
 		play_animation(AnimationState.IDLE)

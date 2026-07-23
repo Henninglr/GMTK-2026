@@ -951,9 +951,9 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_q1583")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"hurt_down",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -971,9 +971,9 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_jls8y")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"hurt_left",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -991,9 +991,9 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_5qf32")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"hurt_right",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -1011,9 +1011,9 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_gusmc")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"hurt_up",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -1376,7 +1376,7 @@ script = ExtResource("1_v6fml")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="." unique_id=1355575001]
 sprite_frames = SubResource("SpriteFrames_xaqli")
-animation = &"attack_down"
+animation = &"hurt_left"
 autoplay = "idle_down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=765537231]
