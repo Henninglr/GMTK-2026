@@ -13,16 +13,23 @@ enum AnimationState {
 	WALK,
 	SPRINT,
 	ATTACK,
-	HURT
+	HURT,
+	DEATH
 }
 
-@export var walk_speed : float = 220.0
-@export var sprint_speed : float = 320.0
+@export var walk_speed : float = 50.0
+@export var sprint_speed : float = 150.0
 @export var attack_frame: int = 3
 @export var attack_range: float = 32.0
+@export var damage_time_loss: float = 10.0
+@export var enemy_kill_time_reward: float = 5.0
+@export var sprint_time_cost_per_second: float = 2.0
+
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite
 @onready var attack_hitbox: Area2D = $AttackHitbox
 @onready var attack_collision: CollisionShape2D = $AttackHitbox/CollisionShape2D
+@onready var time_component: TimeComponent = $TimeComponent
+@onready var time_label: Label = $UI/TimeLabel
 
 var facing_direction: FacingDirection = FacingDirection.DOWN
 var animation_state: AnimationState = AnimationState.IDLE
@@ -30,17 +37,57 @@ var is_attacking: bool = false
 var is_sprinting: bool = false
 var attack_has_hit: bool = false
 var is_hurt: bool = false
+var is_dead: bool = false
 
 func _ready() -> void:
 	animated_sprite.animation_finished.connect(_on_animation_finished)
 	animated_sprite.frame_changed.connect(_on_animation_frame_changed)
+	
+	time_component.time_changed.connect(_on_time_changed)
+	time_component.time_depleted.connect(_on_time_depleted)
+	
+	_on_time_changed(
+		time_component.current_time,
+		time_component.maximum_time
+	)
 
 	play_animation(AnimationState.IDLE)
+	
+func _on_time_depleted() -> void:
+	die()
 
-func _physics_process(_delta: float) -> void:
+func die() -> void:
+	if is_dead:
+		return
+
+	is_dead = true
+	is_hurt = false
+	is_attacking = false
+	is_sprinting = false
+	attack_has_hit = false
+	velocity = Vector2.ZERO
+
+	time_component.pause_countdown()
+	play_animation(AnimationState.DEATH)
+	
+func _on_time_changed(current_time: float, _maximum_time: float) -> void:
+	time_label.text = format_time(current_time)
+	
+func format_time(time_in_seconds: float) -> String:
+	var total_seconds: int = max(ceil(time_in_seconds), 0)
+	var minutes: int = total_seconds / 60
+	var seconds: int = total_seconds % 60
+
+	return "%02d:%02d" % [minutes, seconds]
+
+func _physics_process(delta: float) -> void:
+	if is_dead:
+		velocity = Vector2.ZERO
+		return
+
 	update_input_states()
 	handle_attack()
-	handle_movement()
+	handle_movement(delta)
 	
 func update_input_states() -> void:
 	is_sprinting = Input.is_action_pressed("Sprint")
@@ -50,6 +97,7 @@ func handle_attack() -> void:
 		Input.is_action_just_pressed("Attack")
 		and not is_attacking
 		and not is_hurt
+		and not is_dead
 	):
 		is_attacking = true
 		attack_has_hit = false
@@ -116,22 +164,37 @@ func kill_enemy(enemy: Node) -> void:
 	else:
 		enemy.queue_free()
 
-func handle_movement() -> void:
-	var input_direction: Vector2 = get_movement_input()
-	var current_speed: float = walk_speed
+	time_component.add_time(enemy_kill_time_reward)
 
-	if is_sprinting and not is_attacking and not is_hurt:
-		current_speed = sprint_speed
+
+func handle_movement(delta: float) -> void:
+	var input_direction: Vector2 = get_movement_input()
+
+	var can_sprint: bool = (
+		is_sprinting
+		and input_direction != Vector2.ZERO
+		and not is_attacking
+		and not is_hurt
+	)
+
+	var current_speed: float = sprint_speed if can_sprint else walk_speed
 
 	if is_hurt:
 		velocity = Vector2.ZERO
 	else:
 		velocity = input_direction * current_speed
 
+	if can_sprint:
+		time_component.remove_time(sprint_time_cost_per_second * delta)
+
+		if is_dead:
+			velocity = Vector2.ZERO
+			return
+
 	move_and_slide()
 	check_enemy_collisions()
 
-	if is_attacking or is_hurt:
+	if is_attacking or is_hurt or is_dead:
 		return
 
 	if input_direction == Vector2.ZERO:
@@ -140,13 +203,13 @@ func handle_movement() -> void:
 
 	update_facing_direction(input_direction)
 
-	if is_sprinting:
+	if can_sprint:
 		play_animation(AnimationState.SPRINT)
 	else:
 		play_animation(AnimationState.WALK)
 		
 func check_enemy_collisions() -> void:
-	if is_hurt:
+	if is_hurt or is_dead:
 		return
 
 	for collision_index in get_slide_collision_count():
@@ -158,13 +221,18 @@ func check_enemy_collisions() -> void:
 			return
 			
 func take_hit() -> void:
-	if is_hurt:
+	if is_hurt or is_dead:
 		return
 
 	is_hurt = true
 	is_attacking = false
 	attack_has_hit = false
 	velocity = Vector2.ZERO
+
+	time_component.remove_time(damage_time_loss)
+
+	if is_dead:
+		return
 
 	play_animation(AnimationState.HURT)
 
@@ -206,6 +274,8 @@ func get_animation_state_name(state: AnimationState) -> String:
 			return "attack"
 		AnimationState.HURT:
 			return "hurt"
+		AnimationState.DEATH:
+			return "death"
 	return "idle"
 
 func get_facing_direction_name(direction: FacingDirection) -> String:
@@ -229,8 +299,15 @@ func _on_animation_finished() -> void:
 		AnimationState.HURT:
 			is_hurt = false
 
+		AnimationState.DEATH:
+			_on_death_animation_finished()
+			return
+
 		_:
 			return
+
+	if is_dead:
+		return
 
 	if velocity == Vector2.ZERO:
 		play_animation(AnimationState.IDLE)
@@ -238,6 +315,9 @@ func _on_animation_finished() -> void:
 		play_animation(AnimationState.SPRINT)
 	else:
 		play_animation(AnimationState.WALK)
+		
+func _on_death_animation_finished() -> void:
+	print("Player died.")
 
 func get_movement_input() -> Vector2:
 	return Input.get_vector(

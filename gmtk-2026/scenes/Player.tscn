@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://dkrr51gj6ilul" path="res://assets/sprites/player/swordsman_lvl1_Idle_with_shadow.png" id="5_smehm"]
 [ext_resource type="Texture2D" uid="uid://bj2h61i2o35qy" path="res://assets/sprites/player/swordsman_lvl1_Run_with_shadow.png" id="6_smehm"]
 [ext_resource type="Script" uid="uid://df3sd33a06fn5" path="res://scripts/time_component.gd" id="8_khinc"]
+[ext_resource type="FontFile" uid="uid://ch7nxsraa1a06" path="res://assets/fonts/Highcrest.ttf" id="9_ur7pv"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_unhkg"]
 atlas = ExtResource("2_smehm")
@@ -853,7 +854,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_onyu1")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"death_down",
 "speed": 5.0
 }, {
@@ -879,7 +880,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_aybtq")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"death_left",
 "speed": 5.0
 }, {
@@ -905,7 +906,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_w2coj")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"death_right",
 "speed": 5.0
 }, {
@@ -931,7 +932,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_o6aky")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"death_up",
 "speed": 5.0
 }, {
@@ -1376,7 +1377,7 @@ script = ExtResource("1_v6fml")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="." unique_id=1355575001]
 sprite_frames = SubResource("SpriteFrames_xaqli")
-animation = &"hurt_left"
+animation = &"death_down"
 autoplay = "idle_down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=765537231]
@@ -1391,3 +1392,21 @@ collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox" unique_id=232331792]
 shape = SubResource("RectangleShape2D_xaqli")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=308602840]
+
+[node name="TimeLabel" type="Label" parent="UI" unique_id=1285432296]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -98.0
+offset_top = 61.0
+offset_right = 102.0
+offset_bottom = 126.0
+grow_horizontal = 2
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("9_ur7pv")
+theme_override_font_sizes/font_size = 32
+text = "02:00"
+horizontal_alignment = 1
+vertical_alignment = 1
