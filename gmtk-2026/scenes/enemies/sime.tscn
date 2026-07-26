@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://w83l7iuaipd2" path="res://scripts/sime.gd" id="1_fat0e"]
 [ext_resource type="Texture2D" uid="uid://bxngi0fn47jj" path="res://assets/sprites/enemies/slime/slime_attack_spritesheet.png" id="2_ds4ut"]
 [ext_resource type="Texture2D" uid="uid://v2dkmysnugyf" path="res://assets/sprites/enemies/slime/slime_walk_spritesheet.png" id="3_dih7b"]
+[ext_resource type="PackedScene" uid="uid://dbb5jxv0yp3ry" path="res://scenes/utils/slime_attack.tscn" id="5_6d7kx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lfk27"]
 atlas = ExtResource("2_ds4ut")
@@ -743,12 +744,8 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_5xaec"]
 radius = 8.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_sc62p"]
-radius = 21.023796
-
 [node name="Slime" type="CharacterBody2D" unique_id=1688333745 groups=["enemies"]]
 script = ExtResource("1_fat0e")
-ATTACK_COOLDOWN = 2
 
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=996028837]
 sprite_frames = SubResource("SpriteFrames_5xaec")
@@ -759,6 +756,4 @@ frame = 6
 [node name="HitBox" type="CollisionShape2D" parent="." unique_id=1285258050]
 shape = SubResource("CircleShape2D_5xaec")
 
-[node name="AttackBox" type="CollisionShape2D" parent="." unique_id=2096209982]
-position = Vector2(-1, 2)
-shape = SubResource("CircleShape2D_sc62p")
+[node name="SlimeAttack" parent="." unique_id=715490638 instance=ExtResource("5_6d7kx")]

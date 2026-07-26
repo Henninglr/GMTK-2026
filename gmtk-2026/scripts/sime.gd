@@ -5,7 +5,7 @@ extends CharacterBody2D
 @export var MIN_DISTANCE_TO_PLAYER = 28
 @export var DETECTION_RANGE = 100
 @export var ATTACK_RANGE = 50
-@export var ATTACK_COOLDOWN = 10
+@export var ATTACK_COOLDOWN = 2
 enum Directions {LEFT, RIGHT, UP, DOWN}
 var facing_direction = Directions.DOWN
 var player_ref
