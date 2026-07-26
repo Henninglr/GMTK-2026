@@ -9,15 +9,7 @@ extends CharacterBody2D
 enum Directions {LEFT, RIGHT, UP, DOWN}
 var facing_direction = Directions.DOWN
 var player_ref
-var is_attacking = false
-var attack_cooldown = 0
-
-func attack(delta: float) -> void:
-	if not is_attacking:
-		is_attacking = true
-		$Sprite.play("attack_down")
-		$SlimeAttack.trigger_aoe()
-		attack_cooldown = ATTACK_COOLDOWN
+var wander_timer = 0
 
 func _ready() -> void:
 	$Sprite.play("idle_down")
@@ -33,7 +25,7 @@ func _process(delta: float) -> void:
 	# Update the sprite
 	
 	# If moving
-	if velocity.length() > MIN_MOVE_SPEED_FOR_ANIM and not is_attacking:
+	if velocity.length() > MIN_MOVE_SPEED_FOR_ANIM:
 		var angle = atan2(velocity.y, velocity.x) # angle in [-PI, PI]
 		if abs(angle) < 0.25 * PI:
 			$Sprite.play("walk_right")
@@ -48,7 +40,7 @@ func _process(delta: float) -> void:
 			$Sprite.play("walk_up")
 			facing_direction = Directions.UP
 	#If still
-	elif not is_attacking:
+	else:
 		match facing_direction:
 			Directions.UP:
 				$Sprite.play("idle_up")
@@ -59,15 +51,11 @@ func _process(delta: float) -> void:
 			Directions.RIGHT:
 				$Sprite.play("idle_right")
 	
-	if distance_to_player <= ATTACK_RANGE:
-		attack(delta)
+	#if distance_to_player <= ATTACK_RANGE:
+		#attack(delta)
 	
 	# Check if finished any attacks attack
-	if is_attacking:
-		attack_cooldown -= delta
-		if attack_cooldown <= 0:
-			is_attacking = false
-			$SlimeAttack/CollisionShape2D.disabled = true
+	
 	
 
 func _physics_process(delta):
@@ -78,6 +66,10 @@ func _physics_process(delta):
 	if position.distance_to(player_ref.get_position()) > MIN_DISTANCE_TO_PLAYER and position.distance_to(player_ref.get_position()) <= DETECTION_RANGE:
 		# Set the velocity and multiply by speed
 		velocity = direction * SPEED
-		move_and_slide()
 	else:
-		velocity = Vector2.ZERO
+		if wander_timer <= 0:
+			var random_dir: Vector2 = Vector2.RIGHT.rotated(randf_range(0, TAU))
+			velocity = random_dir * SPEED
+			wander_timer = randf_range(1.0, 3.0)
+	wander_timer -= delta
+	move_and_slide()
