@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://du0ax7t1coqu7"]
 
+[ext_resource type="Script" uid="uid://dnu2l1ylhddnu" path="res://scripts/sound_manager.gd" id="1_h8avn"]
 [ext_resource type="PackedScene" uid="uid://c6guir5jma5c7" path="res://scenes/Player.tscn" id="1_im37l"]
 [ext_resource type="PackedScene" uid="uid://cdcmleh07675p" path="res://scenes/enemies/sime.tscn" id="2_4adyp"]
 
@@ -21,6 +22,7 @@ size = Vector2(32, 640)
 offset_right = 1152.0
 offset_bottom = 648.0
 color = Color(0.48570347, 0.48570353, 0.48570347, 1)
+script = ExtResource("1_h8avn")
 
 [node name="Walls" type="Node2D" parent="." unique_id=925826466]
 

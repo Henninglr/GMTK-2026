@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://bnfovdj0pkyvo"]
+
+[ext_resource type="Script" uid="uid://dnu2l1ylhddnu" path="res://scripts/sound_manager.gd" id="1_s6peo"]
+[ext_resource type="AudioStream" uid="uid://boufsv4pbsbu5" path="res://assets/sounds/effects/combat/sword-sound.mp3" id="2_shlr6"]
+[ext_resource type="AudioStream" uid="uid://wreni2j6sb8l" path="res://assets/sounds/effects/combat/hit-flesh.mp3" id="3_shlr6"]
+[ext_resource type="AudioStream" uid="uid://tsnqdqek50ik" path="res://assets/sounds/effects/combat/death-scream.mp3" id="4_mpi5b"]
+[ext_resource type="AudioStream" uid="uid://dtsyl1k45egfx" path="res://assets/sounds/music/menu-music-dungeon-loop.wav" id="4_ro3ww"]
+[ext_resource type="AudioStream" uid="uid://bmlui5ii0f1le" path="res://assets/sounds/effects/combat/player-hurt-3.mp3" id="5_aa63w"]
+[ext_resource type="AudioStream" uid="uid://7jp55xihyvmi" path="res://assets/sounds/music/gameplay-music-hexxel-enter-the-dungeon.mp3" id="5_v1pt3"]
+[ext_resource type="AudioStream" uid="uid://b8ieqtwh6ddud" path="res://assets/sounds/effects/player-concrete-footsteps.mp3" id="6_aa63w"]
+
+[node name="SoundManager" type="Node" unique_id=1316577297]
+script = ExtResource("1_s6peo")
+sfx_streams = Dictionary[String, AudioStream]({
+"": null,
+"hit_slime": ExtResource("3_shlr6"),
+"player_death": ExtResource("4_mpi5b"),
+"player_hurt": ExtResource("5_aa63w"),
+"player_walk": ExtResource("6_aa63w"),
+"sword_attack": ExtResource("2_shlr6")
+})
+music_streams = Dictionary[String, AudioStream]({
+"gameplay": ExtResource("5_v1pt3"),
+"main_menu": ExtResource("4_ro3ww")
+})

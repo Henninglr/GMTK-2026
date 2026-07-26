@@ -61,6 +61,9 @@ func _ready() -> void:
 	
 	time_label.pivot_offset = time_label.size / 2.0
 	
+	# Assuming player starts with gameplay... start gameplay music
+	SoundManager.play_music("gameplay")
+	
 func _on_time_depleted() -> void:
 	die()
 
@@ -77,6 +80,9 @@ func die() -> void:
 
 	time_component.pause_countdown()
 	play_animation(AnimationState.DEATH)
+	
+	# Sound cue
+	SoundManager.play_sfx("player_death")
 	
 func _on_time_changed(current_time: float, _maximum_time: float) -> void:
 	time_label.text = format_time(current_time)
@@ -129,7 +135,14 @@ func _physics_process(delta: float) -> void:
 	handle_movement(delta)
 	
 func update_input_states() -> void:
-	is_sprinting = Input.is_action_pressed("Sprint")
+	var sprint_pressed = Input.is_action_pressed("Sprint")
+	if sprint_pressed and not is_sprinting:
+		is_sprinting = true
+		SoundManager.is_sprinting = true
+	elif is_sprinting and not sprint_pressed:
+		is_sprinting = false
+		SoundManager.is_sprinting = false
+		
 
 func handle_attack() -> void:
 	if (
@@ -174,12 +187,18 @@ func perform_attack() -> void:
 		return
 
 	attack_has_hit = true
+	
+	SoundManager.play_sfx("sword_attack")
 
 	for body in attack_hitbox.get_overlapping_bodies():
 		var enemy: Node = find_enemy_from_node(body)
 
 		if enemy != null:
 			kill_enemy(enemy)
+			# Hit sound
+			SoundManager.play_sfx("hit_slime")
+			
+		
 
 
 func find_enemy_from_node(node: Node) -> Node:
@@ -224,6 +243,8 @@ func handle_movement(delta: float) -> void:
 		velocity = Vector2.ZERO
 	else:
 		velocity = input_direction * current_speed
+	
+	SoundManager.play_walk(animation_state == AnimationState.WALK or animation_state == AnimationState.SPRINT)
 
 	if can_sprint:
 		time_component.remove_time(sprint_time_cost_per_second * delta)
@@ -271,6 +292,9 @@ func take_hit() -> void:
 	velocity = Vector2.ZERO
 
 	time_component.remove_time(damage_time_loss)
+	
+	# Sound cue
+	SoundManager.play_sfx("player_hurt")
 
 	if is_dead:
 		return
