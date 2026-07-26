@@ -24,13 +24,13 @@ enum AnimationState {
 @export var damage_time_loss: float = 10.0
 @export var enemy_kill_time_reward: float = 5.0
 @export var sprint_time_cost_per_second: float = 2.0
-@export var camera_follow_speed := 4.0
-@export var look_ahead_distance := 20.0
+@export var camera_follow_speed := 8.0
+@export var look_ahead_distance := 10.0
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite
 @onready var attack_hitbox: Area2D = $AttackHitbox
 @onready var attack_collision: CollisionShape2D = $AttackHitbox/CollisionShape2D
-@onready var time_component: TimeComponent = $TimeComponent
+@onready var time_component: Node = $TimeComponent
 @onready var time_label: RichTextLabel = $UI/TimeLabel
 @onready var camera_component: Camera2D = $Camera2D
 
@@ -87,8 +87,8 @@ func format_time(time_in_seconds: float) -> String:
 	var seconds: int = total_seconds % 60
 
 	var text: String = "%02d:%02d" % [minutes, seconds]
-	if is_hurt:
-		text =  "[shake rate=10 level=20]" + text + "[/shake]"
+	if is_hurt or is_sprinting:
+		text = "[color=red][shake rate=15 level=30 color=red]" + text + "[/shake][/color]"
 
 	return text
 	
