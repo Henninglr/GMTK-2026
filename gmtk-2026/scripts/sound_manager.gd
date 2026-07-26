@@ -7,7 +7,7 @@ extends Node
 @export var music_bus: String = "Music"
 
 @export var default_sfx_volume: float = -20.0
-@export var default_music_volume: float = -30.0
+@export var default_music_volume: float = -20.0
 
 @export var sprint_pitch_semitones: float = 4.0
 
@@ -34,6 +34,8 @@ func _ready() -> void:
 	walk_player = AudioStreamPlayer.new()
 	walk_player.stream = sfx_streams["player_walk"]
 	walk_player.bus = sfx_bus
+	walk_player.volume_db = -16
+	walk_player.pitch_scale = 0.90
 	add_child(walk_player)
 	
 	pitch_effect = AudioEffectPitchShift.new()
