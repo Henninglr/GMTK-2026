@@ -9,15 +9,7 @@ extends CharacterBody2D
 enum Directions {LEFT, RIGHT, UP, DOWN}
 var facing_direction = Directions.DOWN
 var player_ref
-var is_attacking = false
-var attack_cooldown = 0
-
-func attack(delta: float) -> void:
-	if not is_attacking:
-		is_attacking = true
-		$Sprite.play("attack_down")
-		$SlimeAttack.trigger_aoe()
-		attack_cooldown = ATTACK_COOLDOWN
+var wander_timer = 0
 
 func _ready() -> void:
 	$Sprite.play("idle_down")
@@ -78,6 +70,10 @@ func _physics_process(delta):
 	if position.distance_to(player_ref.get_position()) > MIN_DISTANCE_TO_PLAYER and position.distance_to(player_ref.get_position()) <= DETECTION_RANGE:
 		# Set the velocity and multiply by speed
 		velocity = direction * SPEED
-		move_and_slide()
 	else:
-		velocity = Vector2.ZERO
+		if wander_timer <= 0:
+			var random_dir: Vector2 = Vector2.RIGHT.rotated(randf_range(0, TAU))
+			velocity = random_dir * SPEED
+			wander_timer = randf_range(1.0, 3.0)
+	wander_timer -= delta
+	move_and_slide()
