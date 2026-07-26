@@ -10,10 +10,15 @@ var player_ref
 
 func _ready() -> void:
 	$Sprite.play("idle_down")
+	# store the player node 
 	player_ref = get_tree().get_first_node_in_group("player")
 
 func _process(delta: float) -> void:
-	print(velocity)
+	#print(velocity)
+	
+	# Update the sprite
+	
+	# If moving
 	if velocity.length() > MIN_MOVE_SPEED_FOR_ANIM:
 		var angle = atan2(velocity.y, velocity.x) # angle in [-PI, PI]
 		if abs(angle) < 0.25 * PI:
@@ -28,6 +33,7 @@ func _process(delta: float) -> void:
 		else:
 			$Sprite.play("walk_up")
 			facing_direction = Directions.UP
+	#If still
 	else:
 		match facing_direction:
 			Directions.UP:
@@ -41,10 +47,8 @@ func _process(delta: float) -> void:
 	# stopped or almost stopped
 
 func _physics_process(delta):
-	# Calculate the direction to the mouse and normalize it
+	# Calculate the direction to the player and normalize it
 	var direction = global_position.direction_to(player_ref.get_position())
-	
-	
 	
 	# Move the enemy using move_and_slide
 	if position.distance_to(player_ref.get_position()) > MIN_DISTANCE_TO_PLAYER and position.distance_to(player_ref.get_position()) <= DETECTION_RANGE:
