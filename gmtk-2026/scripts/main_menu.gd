@@ -1,6 +1,6 @@
 extends Control
 
-@export_file("*.tscn") var game_scene_path: String
+@export_file("*.tscn") var end_game_scene_path: String
 
 
 func _ready() -> void:

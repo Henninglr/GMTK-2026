@@ -17,6 +17,8 @@ enum AnimationState {
 	DEATH
 }
 
+@export var end_scene: PackedScene
+
 @export var walk_speed : float = 50.0
 @export var sprint_speed : float = 150.0
 @export var attack_frame: int = 3
@@ -83,6 +85,7 @@ func _ready() -> void:
 	
 	# Assuming player starts with gameplay... start gameplay music
 	SoundManager.play_music("gameplay")
+	
 func create_ability_visual() -> void:
 	var circle_shape := ability_collision.shape as CircleShape2D
 
@@ -353,6 +356,10 @@ func kill_enemy(enemy: Node) -> void:
 	pulse_time_remaining += 0.25
 	start_pulse()
 	time_component.add_time(enemy_kill_time_reward)
+	
+	await get_tree().process_frame
+	if get_tree().get_nodes_in_group("enemies").is_empty():
+		get_tree().change_scene_to_packed(end_scene)
 
 
 func handle_movement(delta: float) -> void:
