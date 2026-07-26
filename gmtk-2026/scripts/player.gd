@@ -30,7 +30,7 @@ enum AnimationState {
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite
 @onready var attack_hitbox: Area2D = $AttackHitbox
 @onready var attack_collision: CollisionShape2D = $AttackHitbox/CollisionShape2D
-@onready var time_component: TimeComponent = $TimeComponent
+@onready var time_component: Node = $TimeComponent
 @onready var time_label: RichTextLabel = $UI/TimeLabel
 @onready var camera_component: Camera2D = $Camera2D
 

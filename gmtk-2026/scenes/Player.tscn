@@ -1384,14 +1384,14 @@ autoplay = "idle_down"
 position = Vector2(-1, 0)
 shape = SubResource("CapsuleShape2D_xaqli")
 
-[node name="TimeComponent" type="Node" parent="." unique_id=1190408087]
-script = ExtResource("8_khinc")
-
 [node name="AttackHitbox" type="Area2D" parent="." unique_id=1088463378]
 collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox" unique_id=232331792]
 shape = SubResource("RectangleShape2D_xaqli")
+
+[node name="TimeComponent" type="Node" parent="." unique_id=1190408087]
+script = ExtResource("8_khinc")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=308602840]
 

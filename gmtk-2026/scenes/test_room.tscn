@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://du0ax7t1coqu7"]
 
-[ext_resource type="PackedScene" uid="uid://c6guir5jma5c7" path="res://scenes/player.tscn" id="1_im37l"]
+[ext_resource type="PackedScene" uid="uid://c6guir5jma5c7" path="res://scenes/Player.tscn" id="1_im37l"]
 [ext_resource type="PackedScene" uid="uid://cdcmleh07675p" path="res://scenes/enemies/sime.tscn" id="2_4adyp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xaqli"]
@@ -72,5 +72,20 @@ position = Vector2(64, 64)
 [node name="Player" parent="." unique_id=1792432943 instance=ExtResource("1_im37l")]
 position = Vector2(120, 112)
 
-[node name="Slime" parent="." unique_id=1688333745 instance=ExtResource("2_4adyp")]
-position = Vector2(144, 430)
+[node name="Slime" parent="." unique_id=893370257 instance=ExtResource("2_4adyp")]
+position = Vector2(341, 246)
+
+[node name="Slime2" parent="." unique_id=1688333745 instance=ExtResource("2_4adyp")]
+position = Vector2(548, 88)
+
+[node name="Slime3" parent="." unique_id=269685382 instance=ExtResource("2_4adyp")]
+position = Vector2(155, 359)
+
+[node name="Slime4" parent="." unique_id=1809852903 instance=ExtResource("2_4adyp")]
+position = Vector2(291, 461)
+
+[node name="Slime5" parent="." unique_id=1507084640 instance=ExtResource("2_4adyp")]
+position = Vector2(545, 318)
+
+[node name="Slime6" parent="." unique_id=4168162 instance=ExtResource("2_4adyp")]
+position = Vector2(489, 480)
