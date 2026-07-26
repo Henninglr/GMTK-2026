@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://c6guir5jma5c7" path="res://scenes/Player.tscn" id="2_8oql1"]
 [ext_resource type="Texture2D" uid="uid://pnvpmulf2u7y" path="res://assets/sprites/environment/decorative_cracks_walls.png" id="2_xhekj"]
 [ext_resource type="Texture2D" uid="uid://wvkrheclknml" path="res://assets/sprites/environment/objects.png" id="3_8oql1"]
+[ext_resource type="PackedScene" uid="uid://cdcmleh07675p" path="res://scenes/enemies/sime.tscn" id="5_irjyx"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xhekj"]
 texture = ExtResource("1_vu5en")
@@ -871,3 +872,45 @@ tile_set = SubResource("TileSet_pkow5")
 [node name="Objects" type="TileMapLayer" parent="." unique_id=1252975147]
 tile_map_data = PackedByteArray("AAAGAAgAAAACAAQAAAAHAAgAAAADAAQAAAAGAAkAAAACAAUAAAAHAAkAAAADAAUAAAAJAAkAAAACAAQAAAAJAAoAAAACAAUAAAAKAAkAAAADAAQAAAAKAAoAAAADAAUAAAALAAQAAAAIAAAAAAALAAUAAAAIAAEAAAAMAAQAAAAJAAAAAAAMAAUAAAAJAAEAAAA=")
 tile_set = SubResource("TileSet_fd4tx")
+
+[node name="Slime" parent="." unique_id=1688333745 instance=ExtResource("5_irjyx")]
+position = Vector2(220, 146)
+
+[node name="Slime2" parent="." unique_id=1293231838 instance=ExtResource("5_irjyx")]
+position = Vector2(250, 294)
+
+[node name="Slime3" parent="." unique_id=1802511648 instance=ExtResource("5_irjyx")]
+position = Vector2(776, 198)
+
+[node name="Slime4" parent="." unique_id=143585375 instance=ExtResource("5_irjyx")]
+position = Vector2(949, 164)
+
+[node name="Slime5" parent="." unique_id=1591486265 instance=ExtResource("5_irjyx")]
+position = Vector2(780, 593)
+
+[node name="Slime6" parent="." unique_id=1140171454 instance=ExtResource("5_irjyx")]
+position = Vector2(914, 642)
+
+[node name="Slime7" parent="." unique_id=933010265 instance=ExtResource("5_irjyx")]
+position = Vector2(637, -89)
+
+[node name="Slime8" parent="." unique_id=910245983 instance=ExtResource("5_irjyx")]
+position = Vector2(104, 573)
+
+[node name="Slime9" parent="." unique_id=660034750 instance=ExtResource("5_irjyx")]
+position = Vector2(448, 714)
+
+[node name="Slime10" parent="." unique_id=1610029521 instance=ExtResource("5_irjyx")]
+position = Vector2(1160, 825)
+
+[node name="Slime11" parent="." unique_id=312380638 instance=ExtResource("5_irjyx")]
+position = Vector2(1271, 940)
+
+[node name="Slime12" parent="." unique_id=959817893 instance=ExtResource("5_irjyx")]
+position = Vector2(331, 1183)
+
+[node name="Slime13" parent="." unique_id=1817318527 instance=ExtResource("5_irjyx")]
+position = Vector2(485, 1333)
+
+[node name="Slime14" parent="." unique_id=1007615364 instance=ExtResource("5_irjyx")]
+position = Vector2(699, 1180)
