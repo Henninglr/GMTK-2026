@@ -3,6 +3,7 @@ extends CharacterBody2D
 @export var SPEED = 30.0
 @export var MIN_MOVE_SPEED_FOR_ANIM = 28
 @export var MIN_DISTANCE_TO_PLAYER = 28
+@export var DETECTION_RANGE = 100
 enum Directions {LEFT, RIGHT, UP, DOWN}
 var facing_direction = Directions.DOWN
 var player_ref
@@ -46,7 +47,7 @@ func _physics_process(delta):
 	
 	
 	# Move the enemy using move_and_slide
-	if position.distance_to(player_ref.get_position()) > MIN_DISTANCE_TO_PLAYER:
+	if position.distance_to(player_ref.get_position()) > MIN_DISTANCE_TO_PLAYER and position.distance_to(player_ref.get_position()) <= DETECTION_RANGE:
 		# Set the velocity and multiply by speed
 		velocity = direction * SPEED
 		move_and_slide()
