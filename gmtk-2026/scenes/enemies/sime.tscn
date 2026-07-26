@@ -743,6 +743,9 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_5xaec"]
 radius = 8.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_sc62p"]
+radius = 21.023796
+
 [node name="Slime" type="CharacterBody2D" unique_id=1688333745 groups=["enemies"]]
 script = ExtResource("1_fat0e")
 ATTACK_COOLDOWN = 2
@@ -751,6 +754,11 @@ ATTACK_COOLDOWN = 2
 sprite_frames = SubResource("SpriteFrames_5xaec")
 animation = &"attack_down"
 autoplay = "idle_down"
+frame = 6
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1285258050]
+[node name="HitBox" type="CollisionShape2D" parent="." unique_id=1285258050]
 shape = SubResource("CircleShape2D_5xaec")
+
+[node name="AttackBox" type="CollisionShape2D" parent="." unique_id=2096209982]
+position = Vector2(-1, 2)
+shape = SubResource("CircleShape2D_sc62p")

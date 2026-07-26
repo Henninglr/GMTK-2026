@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://dbb5jxv0yp3ry"]
+
+[ext_resource type="Script" uid="uid://conh2lkmg8i5u" path="res://scripts/slime_attack.gd" id="1_is3nk"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5xaec"]
+radius = 21.587032
+
+[node name="SlimeAttack" type="Area2D" unique_id=715490638]
+script = ExtResource("1_is3nk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1729853844]
+shape = SubResource("CircleShape2D_5xaec")
+disabled = true
