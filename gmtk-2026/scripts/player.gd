@@ -61,6 +61,9 @@ func _ready() -> void:
 	
 	time_label.pivot_offset = time_label.size / 2.0
 	
+	# Assuming player starts with gameplay... start gameplay music
+	SoundManager.play_music("gameplay")
+	
 func _on_time_depleted() -> void:
 	die()
 
@@ -77,6 +80,9 @@ func die() -> void:
 
 	time_component.pause_countdown()
 	play_animation(AnimationState.DEATH)
+	
+	# Sound cue
+	SoundManager.play_sfx("player_death")
 	
 func _on_time_changed(current_time: float, _maximum_time: float) -> void:
 	time_label.text = format_time(current_time)
@@ -277,6 +283,9 @@ func take_hit() -> void:
 	velocity = Vector2.ZERO
 
 	time_component.remove_time(damage_time_loss)
+	
+	# Sound cue
+	SoundManager.play_sfx("player_hurt")
 
 	if is_dead:
 		return

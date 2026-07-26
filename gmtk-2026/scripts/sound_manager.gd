@@ -6,8 +6,8 @@ extends Node
 @export var sfx_bus: String = "SFX"
 @export var music_bus: String = "Music"
 
-@export var default_sfx_volume: float = 0.0
-@export var default_music_volume: float = 0.0
+@export var default_sfx_volume: float = -20.0
+@export var default_music_volume: float = -30.0
 
 var music_player: AudioStreamPlayer
 
