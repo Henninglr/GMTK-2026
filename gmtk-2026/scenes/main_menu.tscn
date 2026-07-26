@@ -11,6 +11,9 @@
 [ext_resource type="Texture2D" uid="uid://byupa6tkfuga6" path="res://assets/sprites/environment/menu_background/2.png" id="6_flqon"]
 [ext_resource type="Texture2D" uid="uid://f7j6n46fas4t" path="res://assets/sprites/environment/menu_background/1.png" id="7_rcqid"]
 
+[sub_resource type="LabelSettings" id="LabelSettings_pkow5"]
+font_size = 32
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jk1qb"]
 bg_color = Color(0.09019608, 0.078431375, 0.10980392, 0.8)
 border_width_left = 2
@@ -185,6 +188,14 @@ text = "Time Attack"
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 
+[node name="Label" type="Label" parent="MenuUI/CenterContainer/VBoxContainer" unique_id=122176821]
+layout_mode = 2
+size_flags_vertical = 1
+text = "Kill all the slimes!"
+label_settings = SubResource("LabelSettings_pkow5")
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="StartButton" type="Button" parent="MenuUI/CenterContainer/VBoxContainer" unique_id=135193215]
 custom_minimum_size = Vector2(320, 65)
 layout_mode = 2
@@ -199,6 +210,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_flqon")
 text = "Start"
 
 [node name="ControlsButton" type="Button" parent="MenuUI/CenterContainer/VBoxContainer" unique_id=891957485]
+visible = false
 custom_minimum_size = Vector2(320, 65)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.875, 0.875, 0.875, 1)
@@ -223,3 +235,20 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_5dd4i")
 theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_lgwnu")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_flqon")
 text = "Quit"
+
+[node name="MarginContainer" type="MarginContainer" parent="MenuUI" unique_id=596565664]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -83.0
+offset_right = 975.0
+grow_vertical = 0
+
+[node name="Label" type="Label" parent="MenuUI/MarginContainer" unique_id=2024472270]
+layout_mode = 2
+size_flags_vertical = 1
+text = "CONTROLS: Move - [WASD] | Attack - [Click] | Sprint - [Shift]"
+label_settings = SubResource("LabelSettings_pkow5")
+horizontal_alignment = 1
+vertical_alignment = 1
