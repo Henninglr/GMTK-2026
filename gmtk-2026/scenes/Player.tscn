@@ -1,14 +1,14 @@
 [gd_scene format=3 uid="uid://c6guir5jma5c7"]
 
 [ext_resource type="Script" uid="uid://xdnfrexmipmh" path="res://scripts/player.gd" id="1_v6fml"]
-[ext_resource type="Texture2D" uid="uid://bfxf8dayfxvwp" path="res://assets/sprites/player/swordsman_lvl1_attack_with_shadow.png" id="2_smehm"]
-[ext_resource type="Texture2D" uid="uid://socdixwjrtuy" path="res://assets/sprites/player/swordsman_lvl1_Walk_with_shadow.png" id="3_3li8b"]
-[ext_resource type="Texture2D" uid="uid://bev7vq8l4prca" path="res://assets/sprites/player/swordsman_lvl1_Death_with_shadow.png" id="3_smehm"]
-[ext_resource type="Texture2D" uid="uid://bcgso5qfjrk6w" path="res://assets/sprites/player/swordsman_lvl1_Hurt_with_shadow.png" id="4_smehm"]
-[ext_resource type="Texture2D" uid="uid://dkrr51gj6ilul" path="res://assets/sprites/player/swordsman_lvl1_Idle_with_shadow.png" id="5_smehm"]
-[ext_resource type="Texture2D" uid="uid://bj2h61i2o35qy" path="res://assets/sprites/player/swordsman_lvl1_Run_with_shadow.png" id="6_smehm"]
+[ext_resource type="Texture2D" uid="uid://bfxf8dayfxvwp" path="res://assets/sprites/player/Swordsman_lvl1_attack_with_shadow.png" id="2_smehm"]
+[ext_resource type="Texture2D" uid="uid://socdixwjrtuy" path="res://assets/sprites/player/Swordsman_lvl1_Walk_with_shadow.png" id="3_3li8b"]
+[ext_resource type="Texture2D" uid="uid://bev7vq8l4prca" path="res://assets/sprites/player/Swordsman_lvl1_Death_with_shadow.png" id="3_smehm"]
+[ext_resource type="Texture2D" uid="uid://bcgso5qfjrk6w" path="res://assets/sprites/player/Swordsman_lvl1_Hurt_with_shadow.png" id="4_smehm"]
+[ext_resource type="Texture2D" uid="uid://dkrr51gj6ilul" path="res://assets/sprites/player/Swordsman_lvl1_Idle_with_shadow.png" id="5_smehm"]
+[ext_resource type="Texture2D" uid="uid://bj2h61i2o35qy" path="res://assets/sprites/player/Swordsman_lvl1_Run_with_shadow.png" id="6_smehm"]
 [ext_resource type="Script" uid="uid://df3sd33a06fn5" path="res://scripts/time_component.gd" id="8_khinc"]
-[ext_resource type="FontFile" uid="uid://ch7nxsraa1a06" path="res://assets/fonts/Highcrest.ttf" id="9_ur7pv"]
+[ext_resource type="FontFile" uid="uid://ch7nxsraa1a06" path="res://assets/fonts/Highcrest.ttf" id="9_bruh7"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_unhkg"]
 atlas = ExtResource("2_smehm")
@@ -1395,18 +1395,22 @@ shape = SubResource("RectangleShape2D_xaqli")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=308602840]
 
-[node name="TimeLabel" type="Label" parent="UI" unique_id=1285432296]
+[node name="TimeLabel" type="RichTextLabel" parent="UI" unique_id=698400008]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -98.0
-offset_top = 61.0
-offset_right = 102.0
-offset_bottom = 126.0
+offset_left = -100.0
+offset_right = 100.0
+offset_bottom = 154.0
 grow_horizontal = 2
 theme_override_constants/outline_size = 4
-theme_override_fonts/font = ExtResource("9_ur7pv")
-theme_override_font_sizes/font_size = 32
+theme_override_fonts/normal_font = ExtResource("9_bruh7")
+theme_override_font_sizes/normal_font_size = 72
+bbcode_enabled = true
 text = "02:00"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=666523544]
+zoom = Vector2(2, 2)
+position_smoothing_speed = 7.0

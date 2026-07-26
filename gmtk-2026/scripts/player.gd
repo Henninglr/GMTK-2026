@@ -24,12 +24,15 @@ enum AnimationState {
 @export var damage_time_loss: float = 10.0
 @export var enemy_kill_time_reward: float = 5.0
 @export var sprint_time_cost_per_second: float = 2.0
+@export var camera_follow_speed := 4.0
+@export var look_ahead_distance := 20.0
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite
 @onready var attack_hitbox: Area2D = $AttackHitbox
 @onready var attack_collision: CollisionShape2D = $AttackHitbox/CollisionShape2D
 @onready var time_component: TimeComponent = $TimeComponent
-@onready var time_label: Label = $UI/TimeLabel
+@onready var time_label: RichTextLabel = $UI/TimeLabel
+@onready var camera_component: Camera2D = $Camera2D
 
 var facing_direction: FacingDirection = FacingDirection.DOWN
 var animation_state: AnimationState = AnimationState.IDLE
@@ -38,6 +41,9 @@ var is_sprinting: bool = false
 var attack_has_hit: bool = false
 var is_hurt: bool = false
 var is_dead: bool = false
+
+var pulse_time_remaining : float = 0.0
+var is_pulsing : bool = false
 
 func _ready() -> void:
 	animated_sprite.animation_finished.connect(_on_animation_finished)
@@ -52,6 +58,8 @@ func _ready() -> void:
 	)
 
 	play_animation(AnimationState.IDLE)
+	
+	time_label.pivot_offset = time_label.size / 2.0
 	
 func _on_time_depleted() -> void:
 	die()
@@ -78,7 +86,38 @@ func format_time(time_in_seconds: float) -> String:
 	var minutes: int = total_seconds / 60
 	var seconds: int = total_seconds % 60
 
-	return "%02d:%02d" % [minutes, seconds]
+	var text: String = "%02d:%02d" % [minutes, seconds]
+	if is_hurt:
+		text =  "[shake rate=10 level=20]" + text + "[/shake]"
+
+	return text
+	
+# Fade the time label to green
+func start_pulse() -> void:
+	is_pulsing = true
+
+	var tween = create_tween()
+	tween.parallel().tween_property(time_label, "scale", Vector2.ONE * 1.3, 0.1)
+	tween.parallel().tween_property(time_label, "modulate", Color.LIME_GREEN, 0.1)
+
+# Fade the time label back to white
+func end_pulse() -> void:
+	is_pulsing = false
+
+	var tween = create_tween()
+	tween.parallel().tween_property(time_label, "scale", Vector2.ONE, 0.2)
+	tween.parallel().tween_property(time_label, "modulate", Color.WHITE, 0.2)
+
+func _process(delta: float) -> void:
+	if is_pulsing:
+		pulse_time_remaining -= delta
+
+		if pulse_time_remaining <= 0.0:
+			end_pulse()
+			
+	# Update the camera position
+	var camera_target: Vector2 = global_position + velocity.normalized() * look_ahead_distance
+	camera_component.global_position = camera_component.global_position.lerp(camera_target, camera_follow_speed * delta)
 
 func _physics_process(delta: float) -> void:
 	if is_dead:
@@ -164,6 +203,8 @@ func kill_enemy(enemy: Node) -> void:
 	else:
 		enemy.queue_free()
 
+	pulse_time_remaining += 0.25
+	start_pulse()
 	time_component.add_time(enemy_kill_time_reward)
 
 

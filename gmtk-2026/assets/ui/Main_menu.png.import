@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://pnvpmulf2u7y"
-path="res://.godot/imported/decorative_cracks_walls.png-f7de813428f9057d501d84be0fb343f0.ctex"
+uid="uid://fy74ad4qq0n"
+path="res://.godot/imported/Main_menu.png-06fd99a3eaa23223f5c49978fe766833.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/decorative_cracks_walls.png"
-dest_files=["res://.godot/imported/decorative_cracks_walls.png-f7de813428f9057d501d84be0fb343f0.ctex"]
+source_file="res://assets/ui/Main_menu.png"
+dest_files=["res://.godot/imported/Main_menu.png-06fd99a3eaa23223f5c49978fe766833.ctex"]
 
 [params]
 
