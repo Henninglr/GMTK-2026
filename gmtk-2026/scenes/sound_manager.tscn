@@ -1,3 +1,12 @@
 [gd_scene format=3 uid="uid://bnfovdj0pkyvo"]
 
+[ext_resource type="Script" uid="uid://dnu2l1ylhddnu" path="res://scripts/sound_manager.gd" id="1_s6peo"]
+[ext_resource type="AudioStream" uid="uid://boufsv4pbsbu5" path="res://assets/sounds/effects/combat/sword-sound.mp3" id="2_shlr6"]
+[ext_resource type="AudioStream" uid="uid://wreni2j6sb8l" path="res://assets/sounds/effects/combat/hit-flesh.mp3" id="3_shlr6"]
+
 [node name="SoundManager" type="Node" unique_id=1316577297]
+script = ExtResource("1_s6peo")
+sfx_streams = Dictionary[String, AudioStream]({
+"hit_slime": ExtResource("3_shlr6"),
+"sword_attack": ExtResource("2_shlr6")
+})

@@ -174,12 +174,18 @@ func perform_attack() -> void:
 		return
 
 	attack_has_hit = true
+	
+	SoundManager.play_sfx("sword_attack")
 
 	for body in attack_hitbox.get_overlapping_bodies():
 		var enemy: Node = find_enemy_from_node(body)
 
 		if enemy != null:
 			kill_enemy(enemy)
+			# Hit sound
+			SoundManager.play_sfx("hit_slime")
+			
+		
 
 
 func find_enemy_from_node(node: Node) -> Node:
