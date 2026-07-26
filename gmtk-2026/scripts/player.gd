@@ -33,6 +33,7 @@ enum AnimationState {
 @export var ability_visual_duration: float = 0.35
 @export var ability_visual_colour: Color = Color(0.3, 0.7, 1.0, 0.45)
 @export var ability_visual_segments: int = 48
+@export var invulnerability_duration: float = 1.0
 
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite
@@ -44,6 +45,9 @@ enum AnimationState {
 @onready var ability_area: Area2D = $AbilityArea
 @onready var ability_collision: CollisionShape2D = $AbilityArea/CollisionShape2D
 @onready var ability_visual: Polygon2D = $AbilityVisual
+@export var knockback_strength: float = 100.0
+@export var knockback_duration: float = 0.15
+
 
 var facing_direction: FacingDirection = FacingDirection.DOWN
 var animation_state: AnimationState = AnimationState.IDLE
@@ -53,6 +57,9 @@ var attack_has_hit: bool = false
 var is_hurt: bool = false
 var is_dead: bool = false
 var ability_on_cooldown: bool = false
+var is_invulnerable: bool = false
+var is_being_knocked_back: bool = false
+var knockback_velocity: Vector2 = Vector2.ZERO
 
 var pulse_time_remaining : float = 0.0
 var is_pulsing : bool = false
@@ -353,6 +360,13 @@ func handle_movement(delta: float) -> void:
 		if is_dead:
 			velocity = Vector2.ZERO
 			return
+	
+	if is_being_knocked_back:
+		velocity = knockback_velocity
+	elif is_hurt:
+		velocity = Vector2.ZERO
+	else:
+		velocity = input_direction * current_speed
 
 	move_and_slide()
 	check_enemy_collisions()
@@ -380,17 +394,20 @@ func check_enemy_collisions() -> void:
 		var collider: Object = collision.get_collider()
 
 		if collider is Node and collider.is_in_group("enemies"):
-			take_hit()
+			take_hit(collider)
 			return
 			
-func take_hit() -> void:
-	if is_hurt or is_dead:
+func take_hit(enemy: Node2D) -> void:
+	if is_hurt or is_dead or is_invulnerable:
 		return
 
 	is_hurt = true
+	is_invulnerable = true
 	is_attacking = false
 	attack_has_hit = false
-	velocity = Vector2.ZERO
+
+	var knockback_direction: Vector2 = enemy.global_position.direction_to(global_position)
+	start_knockback(knockback_direction)
 
 	time_component.remove_time(damage_time_loss)
 
@@ -398,6 +415,27 @@ func take_hit() -> void:
 		return
 
 	play_animation(AnimationState.HURT)
+	start_invulnerability()
+	
+func start_knockback(direction: Vector2) -> void:
+	is_being_knocked_back = true
+	knockback_velocity = direction * knockback_strength
+
+	await get_tree().create_timer(knockback_duration).timeout
+
+	if not is_inside_tree():
+		return
+
+	is_being_knocked_back = false
+	knockback_velocity = Vector2.ZERO
+	
+func start_invulnerability() -> void:
+	await get_tree().create_timer(invulnerability_duration).timeout
+
+	if not is_inside_tree():
+		return
+
+	is_invulnerable = false
 
 func update_facing_direction(input_direction: Vector2) -> void:
 	if abs(input_direction.x) > abs(input_direction.y):
