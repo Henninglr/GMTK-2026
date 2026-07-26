@@ -1366,11 +1366,14 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xaqli"]
-radius = 11.0
-height = 38.0
+radius = 4.0
+height = 14.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xaqli"]
 size = Vector2(9, 9)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xaqli"]
+radius = 50.0
 
 [node name="Player" type="CharacterBody2D" unique_id=1792432943 groups=["player"]]
 script = ExtResource("1_v6fml")
@@ -1414,3 +1417,13 @@ vertical_alignment = 1
 [node name="Camera2D" type="Camera2D" parent="." unique_id=666523544]
 zoom = Vector2(2, 2)
 position_smoothing_speed = 7.0
+
+[node name="AbilityArea" type="Area2D" parent="." unique_id=1438270941]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AbilityArea" unique_id=492175560]
+shape = SubResource("CircleShape2D_xaqli")
+
+[node name="AbilityVisual" type="Polygon2D" parent="." unique_id=969083979]
+visible = false
+z_index = 5

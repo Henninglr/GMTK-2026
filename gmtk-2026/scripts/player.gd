@@ -26,6 +26,15 @@ enum AnimationState {
 @export var sprint_time_cost_per_second: float = 2.0
 @export var camera_follow_speed := 8.0
 @export var look_ahead_distance := 10.0
+@export_category("Special Ability")
+@export var ability_time_cost: float = 20.0
+@export var ability_cooldown: float = 2.0
+@export_category("Ability Visual")
+@export var ability_visual_duration: float = 0.35
+@export var ability_visual_colour: Color = Color(0.3, 0.7, 1.0, 0.45)
+@export var ability_visual_segments: int = 48
+@export var invulnerability_duration: float = 1.0
+
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite
 @onready var attack_hitbox: Area2D = $AttackHitbox
@@ -33,6 +42,12 @@ enum AnimationState {
 @onready var time_component: Node = $TimeComponent
 @onready var time_label: RichTextLabel = $UI/TimeLabel
 @onready var camera_component: Camera2D = $Camera2D
+@onready var ability_area: Area2D = $AbilityArea
+@onready var ability_collision: CollisionShape2D = $AbilityArea/CollisionShape2D
+@onready var ability_visual: Polygon2D = $AbilityVisual
+@export var knockback_strength: float = 100.0
+@export var knockback_duration: float = 0.15
+
 
 var facing_direction: FacingDirection = FacingDirection.DOWN
 var animation_state: AnimationState = AnimationState.IDLE
@@ -41,6 +56,10 @@ var is_sprinting: bool = false
 var attack_has_hit: bool = false
 var is_hurt: bool = false
 var is_dead: bool = false
+var ability_on_cooldown: bool = false
+var is_invulnerable: bool = false
+var is_being_knocked_back: bool = false
+var knockback_velocity: Vector2 = Vector2.ZERO
 
 var pulse_time_remaining : float = 0.0
 var is_pulsing : bool = false
@@ -56,13 +75,32 @@ func _ready() -> void:
 		time_component.current_time,
 		time_component.maximum_time
 	)
-
+	
+	create_ability_visual()
 	play_animation(AnimationState.IDLE)
 	
 	time_label.pivot_offset = time_label.size / 2.0
 	
 	# Assuming player starts with gameplay... start gameplay music
 	SoundManager.play_music("gameplay")
+func create_ability_visual() -> void:
+	var circle_shape := ability_collision.shape as CircleShape2D
+
+	if circle_shape == null:
+		push_warning("AbilityArea requires a CircleShape2D.")
+		return
+
+	var points := PackedVector2Array()
+
+	for index in range(ability_visual_segments):
+		var angle := TAU * float(index) / float(ability_visual_segments)
+		var point := Vector2(cos(angle), sin(angle)) * circle_shape.radius
+		points.append(point)
+
+	ability_visual.polygon = points
+	ability_visual.color = ability_visual_colour
+	ability_visual.scale = Vector2.ZERO
+	ability_visual.visible = false
 	
 func _on_time_depleted() -> void:
 	die()
@@ -132,6 +170,7 @@ func _physics_process(delta: float) -> void:
 
 	update_input_states()
 	handle_attack()
+	handle_special_ability()
 	handle_movement(delta)
 	
 func update_input_states() -> void:
@@ -156,6 +195,95 @@ func handle_attack() -> void:
 
 		update_attack_hitbox_position()
 		play_animation(AnimationState.ATTACK)
+		
+func handle_special_ability() -> void:
+	if not Input.is_action_just_pressed("SpecialAbility"):
+		return
+
+	if not can_use_special_ability():
+		return
+
+	use_special_ability()
+	
+func can_use_special_ability() -> bool:
+	if is_dead:
+		return false
+
+	if is_hurt:
+		return false
+
+	if is_attacking:
+		return false
+
+	if ability_on_cooldown:
+		return false
+
+	return time_component.has_enough_time(ability_time_cost)
+	
+func use_special_ability() -> void:
+	if not time_component.spend_time(ability_time_cost):
+		return
+
+	ability_on_cooldown = true
+
+	play_ability_visual()
+	perform_aoe_attack()
+	start_ability_cooldown()
+	
+func play_ability_visual() -> void:
+	ability_visual.visible = true
+	ability_visual.scale = Vector2.ZERO
+	ability_visual.modulate.a = 1.0
+
+	var tween := create_tween()
+
+	tween.set_parallel(true)
+
+	tween.tween_property(
+		ability_visual,
+		"scale",
+		Vector2.ONE,
+		ability_visual_duration
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
+	tween.tween_property(
+		ability_visual,
+		"modulate:a",
+		0.0,
+		ability_visual_duration
+	)
+
+	tween.finished.connect(_on_ability_visual_finished)
+	
+func _on_ability_visual_finished() -> void:
+	ability_visual.visible = false
+	ability_visual.scale = Vector2.ZERO
+	ability_visual.modulate.a = 1.0
+	
+func perform_aoe_attack() -> void:
+	var enemies_hit: Array[Node] = []
+
+	for body in ability_area.get_overlapping_bodies():
+		var enemy: Node = find_enemy_from_node(body)
+
+		if enemy == null:
+			continue
+
+		if enemy in enemies_hit:
+			continue
+
+		enemies_hit.append(enemy)
+
+	for enemy in enemies_hit:
+		kill_enemy(enemy)
+		
+func start_ability_cooldown() -> void:
+	await get_tree().create_timer(ability_cooldown).timeout
+
+	if not is_inside_tree():
+		return
+
+	ability_on_cooldown = false
 
 func update_attack_hitbox_position() -> void:
 	match facing_direction:
@@ -252,6 +380,13 @@ func handle_movement(delta: float) -> void:
 		if is_dead:
 			velocity = Vector2.ZERO
 			return
+	
+	if is_being_knocked_back:
+		velocity = knockback_velocity
+	elif is_hurt:
+		velocity = Vector2.ZERO
+	else:
+		velocity = input_direction * current_speed
 
 	move_and_slide()
 	check_enemy_collisions()
@@ -279,17 +414,20 @@ func check_enemy_collisions() -> void:
 		var collider: Object = collision.get_collider()
 
 		if collider is Node and collider.is_in_group("enemies"):
-			take_hit()
+			take_hit(collider)
 			return
 			
-func take_hit() -> void:
-	if is_hurt or is_dead:
+func take_hit(enemy: Node2D) -> void:
+	if is_hurt or is_dead or is_invulnerable:
 		return
 
 	is_hurt = true
+	is_invulnerable = true
 	is_attacking = false
 	attack_has_hit = false
-	velocity = Vector2.ZERO
+
+	var knockback_direction: Vector2 = enemy.global_position.direction_to(global_position)
+	start_knockback(knockback_direction)
 
 	time_component.remove_time(damage_time_loss)
 	
@@ -300,6 +438,27 @@ func take_hit() -> void:
 		return
 
 	play_animation(AnimationState.HURT)
+	start_invulnerability()
+	
+func start_knockback(direction: Vector2) -> void:
+	is_being_knocked_back = true
+	knockback_velocity = direction * knockback_strength
+
+	await get_tree().create_timer(knockback_duration).timeout
+
+	if not is_inside_tree():
+		return
+
+	is_being_knocked_back = false
+	knockback_velocity = Vector2.ZERO
+	
+func start_invulnerability() -> void:
+	await get_tree().create_timer(invulnerability_duration).timeout
+
+	if not is_inside_tree():
+		return
+
+	is_invulnerable = false
 
 func update_facing_direction(input_direction: Vector2) -> void:
 	if abs(input_direction.x) > abs(input_direction.y):
