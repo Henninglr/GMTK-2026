@@ -5,4 +5,4 @@ func trigger_aoe() -> void:
 	var overlapping_bodies = get_overlapping_bodies()
 	for body in overlapping_bodies:
 		if body.is_in_group("player"):
-			body.take_damage()
+			body.take_hit()
