@@ -16,6 +16,7 @@ func attack(delta: float) -> void:
 	if not is_attacking:
 		is_attacking = true
 		$Sprite.play("attack_down")
+		$SlimeAttack.trigger_aoe()
 		attack_cooldown = ATTACK_COOLDOWN
 
 func _ready() -> void:
@@ -66,6 +67,7 @@ func _process(delta: float) -> void:
 		attack_cooldown -= delta
 		if attack_cooldown <= 0:
 			is_attacking = false
+			$SlimeAttack/CollisionShape2D.disabled = true
 	
 
 func _physics_process(delta):
