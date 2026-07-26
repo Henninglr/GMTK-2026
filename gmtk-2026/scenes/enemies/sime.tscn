@@ -745,6 +745,7 @@ radius = 8.0
 
 [node name="Slime" type="CharacterBody2D" unique_id=1688333745 groups=["enemies"]]
 script = ExtResource("1_fat0e")
+ATTACK_COOLDOWN = 2
 
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=996028837]
 sprite_frames = SubResource("SpriteFrames_5xaec")

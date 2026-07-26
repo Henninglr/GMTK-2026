@@ -4,9 +4,19 @@ extends CharacterBody2D
 @export var MIN_MOVE_SPEED_FOR_ANIM = 28
 @export var MIN_DISTANCE_TO_PLAYER = 28
 @export var DETECTION_RANGE = 100
+@export var ATTACK_RANGE = 50
+@export var ATTACK_COOLDOWN = 10
 enum Directions {LEFT, RIGHT, UP, DOWN}
 var facing_direction = Directions.DOWN
 var player_ref
+var is_attacking = false
+var attack_cooldown = 0
+
+func attack(delta: float) -> void:
+	if not is_attacking:
+		is_attacking = true
+		$Sprite.play("attack_down")
+		attack_cooldown = ATTACK_COOLDOWN
 
 func _ready() -> void:
 	$Sprite.play("idle_down")
@@ -16,10 +26,13 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	#print(velocity)
 	
+	var player_pcsition = player_ref.get_position()
+	var distance_to_player = position.distance_to(player_pcsition)
+	
 	# Update the sprite
 	
 	# If moving
-	if velocity.length() > MIN_MOVE_SPEED_FOR_ANIM:
+	if velocity.length() > MIN_MOVE_SPEED_FOR_ANIM and not is_attacking:
 		var angle = atan2(velocity.y, velocity.x) # angle in [-PI, PI]
 		if abs(angle) < 0.25 * PI:
 			$Sprite.play("walk_right")
@@ -34,7 +47,7 @@ func _process(delta: float) -> void:
 			$Sprite.play("walk_up")
 			facing_direction = Directions.UP
 	#If still
-	else:
+	elif not is_attacking:
 		match facing_direction:
 			Directions.UP:
 				$Sprite.play("idle_up")
@@ -44,7 +57,16 @@ func _process(delta: float) -> void:
 				$Sprite.play("idle_left")
 			Directions.RIGHT:
 				$Sprite.play("idle_right")
-	# stopped or almost stopped
+	
+	if distance_to_player <= ATTACK_RANGE:
+		attack(delta)
+	
+	# Check if finished any attacks attack
+	if is_attacking:
+		attack_cooldown -= delta
+		if attack_cooldown <= 0:
+			is_attacking = false
+	
 
 func _physics_process(delta):
 	# Calculate the direction to the player and normalize it
