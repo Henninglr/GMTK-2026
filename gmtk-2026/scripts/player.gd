@@ -135,7 +135,14 @@ func _physics_process(delta: float) -> void:
 	handle_movement(delta)
 	
 func update_input_states() -> void:
-	is_sprinting = Input.is_action_pressed("Sprint")
+	var sprint_pressed = Input.is_action_pressed("Sprint")
+	if sprint_pressed and not is_sprinting:
+		is_sprinting = true
+		SoundManager.is_sprinting = true
+	elif is_sprinting and not sprint_pressed:
+		is_sprinting = false
+		SoundManager.is_sprinting = false
+		
 
 func handle_attack() -> void:
 	if (
@@ -236,6 +243,8 @@ func handle_movement(delta: float) -> void:
 		velocity = Vector2.ZERO
 	else:
 		velocity = input_direction * current_speed
+	
+	SoundManager.play_walk(animation_state == AnimationState.WALK or animation_state == AnimationState.SPRINT)
 
 	if can_sprint:
 		time_component.remove_time(sprint_time_cost_per_second * delta)
