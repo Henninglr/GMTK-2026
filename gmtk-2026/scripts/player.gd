@@ -35,6 +35,8 @@ enum AnimationState {
 @export var ability_visual_segments: int = 48
 @export var invulnerability_duration: float = 1.0
 
+@export_file("*.tscn") var game_over_scene_path: String
+
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite
 @onready var attack_hitbox: Area2D = $AttackHitbox
@@ -119,8 +121,15 @@ func die() -> void:
 	time_component.pause_countdown()
 	play_animation(AnimationState.DEATH)
 	
+	
 	# Sound cue
 	SoundManager.play_sfx("player_death")
+	
+	if game_over_scene_path.is_empty():
+		push_warning("No game-over scene has been assigned to the player.")
+		return
+
+	get_tree().change_scene_to_file(game_over_scene_path)
 	
 func _on_time_changed(current_time: float, _maximum_time: float) -> void:
 	time_label.text = format_time(current_time)
