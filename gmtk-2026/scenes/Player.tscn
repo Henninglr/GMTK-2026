@@ -1366,8 +1366,8 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xaqli"]
-radius = 8.0
-height = 26.0
+radius = 4.0
+height = 14.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xaqli"]
 size = Vector2(9, 9)
