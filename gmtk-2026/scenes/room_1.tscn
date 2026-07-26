@@ -863,6 +863,7 @@ tile_set = SubResource("TileSet_pkow5")
 
 [node name="Player" parent="." unique_id=1792432943 instance=ExtResource("2_8oql1")]
 position = Vector2(86, 84)
+ability_time_cost = 10.0
 
 [node name="Walls" type="TileMapLayer" parent="." unique_id=1768270399]
 position = Vector2(7, -37)
