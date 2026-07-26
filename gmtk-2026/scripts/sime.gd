@@ -25,7 +25,7 @@ func _process(delta: float) -> void:
 	# Update the sprite
 	
 	# If moving
-	if velocity.length() > MIN_MOVE_SPEED_FOR_ANIM and not is_attacking:
+	if velocity.length() > MIN_MOVE_SPEED_FOR_ANIM:
 		var angle = atan2(velocity.y, velocity.x) # angle in [-PI, PI]
 		if abs(angle) < 0.25 * PI:
 			$Sprite.play("walk_right")
@@ -40,7 +40,7 @@ func _process(delta: float) -> void:
 			$Sprite.play("walk_up")
 			facing_direction = Directions.UP
 	#If still
-	elif not is_attacking:
+	else:
 		match facing_direction:
 			Directions.UP:
 				$Sprite.play("idle_up")
@@ -51,15 +51,11 @@ func _process(delta: float) -> void:
 			Directions.RIGHT:
 				$Sprite.play("idle_right")
 	
-	if distance_to_player <= ATTACK_RANGE:
-		attack(delta)
+	#if distance_to_player <= ATTACK_RANGE:
+		#attack(delta)
 	
 	# Check if finished any attacks attack
-	if is_attacking:
-		attack_cooldown -= delta
-		if attack_cooldown <= 0:
-			is_attacking = false
-			$SlimeAttack/CollisionShape2D.disabled = true
+	
 	
 
 func _physics_process(delta):
