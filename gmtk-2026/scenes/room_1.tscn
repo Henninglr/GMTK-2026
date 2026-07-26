@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://jt4ho4al6tbr" path="res://scripts/level.gd" id="1_0akh5"]
 [ext_resource type="Texture2D" uid="uid://cbytdko61capt" path="res://assets/sprites/environment/walls_floor.png" id="1_vu5en"]
-[ext_resource type="PackedScene" uid="uid://c6guir5jma5c7" path="res://scenes/player.tscn" id="2_8oql1"]
+[ext_resource type="PackedScene" uid="uid://c6guir5jma5c7" path="res://scenes/Player.tscn" id="2_8oql1"]
 [ext_resource type="Texture2D" uid="uid://pnvpmulf2u7y" path="res://assets/sprites/environment/decorative_cracks_walls.png" id="2_xhekj"]
 [ext_resource type="Texture2D" uid="uid://wvkrheclknml" path="res://assets/sprites/environment/objects.png" id="3_8oql1"]
 [ext_resource type="PackedScene" uid="uid://cdcmleh07675p" path="res://scenes/enemies/sime.tscn" id="5_irjyx"]
